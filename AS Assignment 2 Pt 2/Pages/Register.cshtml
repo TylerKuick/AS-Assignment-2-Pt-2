@@ -1,0 +1,80 @@
+﻿@page
+@model AS_Assignment_2_Pt_2.Pages.RegisterModel
+@{
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+            <h1 class="mb-3" >Register</h1>
+
+            <form method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="mb-3"> 
+                    <label class="form-label" asp-for="RModel.Fname">First Name</label>
+                    <input type="Text" asp-for="RModel.Fname" class="form-control"/>
+                    <span asp-validation-for="RModel.Fname" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3"> 
+                    <label class="form-label" asp-for="RModel.Lname">Last Name</label>
+                    <input type="Text" asp-for="RModel.Lname" class="form-control"/>
+                    <span asp-validation-for="RModel.Lname" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Gender">Gender</label>
+                    <input type="Text" asp-for="RModel.Gender" class="form-control" />
+                    <span asp-validation-for="RModel.Gender" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.NRIC">NRIC</label>
+                    <input type="Text" asp-for="RModel.NRIC" class="form-control" />
+                    <span asp-validation-for="RModel.NRIC" class="text-danger"></span>
+                </div>
+                                                                                    
+                <div class="mb-3"> 
+                    <label class="form-label" asp-for="RModel.EmailAddress">Email Address</label>
+                    <input type="email" asp-for="RModel.EmailAddress" class="form-control"/>
+                    <span asp-validation-for="RModel.EmailAddress" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Password">Password</label>
+                    <input type="text" id="password" asp-for="RModel.Password" class="form-control" onkeyup="validate()"/>
+                    <p id="feedback"></p>
+                    <span asp-validation-for="RModel.Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
+                    <input type="text" asp-for="RModel.ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="RModel.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.DOB">Date of Birth</label>
+                    <input type="date" asp-for="RModel.DOB" class="form-control" />
+                    <span asp-validation-for="RModel.DOB" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Resume">Resume</label>
+                    <input type="file" asp-for="RModel.Resume" class="form-control" />
+                    <span asp-validation-for="RModel.Resume" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.WhoAmI">Who Am I</label>
+                    <input type="Text" asp-for="RModel.WhoAmI" class="form-control" />
+                    <span asp-validation-for="RModel.WhoAmI" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" onclick="validate()">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+}
