@@ -80,15 +80,7 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-            @section Javascript {
-                <script type="text/javascript">
-                    grecaptcha.ready(function () {
-                        grecaptcha.execute('6LesYmApAAAAAPDi1cKdyKM4fnurSPo3Ji3tDCw-', { action: "Login: " }).then(function (token) {
-                            document.getElementById("g-recaptcha-response").ariaValueMax = token;
-                        });
-                    });
-                </script>
-            }
+            @RenderSection("Scripts", required: false)
         </main>
     </div>
 
@@ -102,6 +94,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: true)
 </body>
 </html>

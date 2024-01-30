@@ -13,6 +13,7 @@ using System;
 using Nancy.Json;
 using System.Net;
 using System.Web;
+using System.Text.Json;
 
 
 namespace AS_Assignment_2_Pt_2.Pages
@@ -103,14 +104,17 @@ namespace AS_Assignment_2_Pt_2.Pages
 
         public class MyObject
         {
-            public string success { get; set; }
-            public List<string> ErrorMessage { get; set; }
+            public bool success { get; set; }
+            public DateTime? challenge_ts {  get; set; }
+            public string? hostname {  get; set; }
+            public float? score {  get; set; }
+            public string? action { get; set; }
+            public List<string>? ErrorMessage { get; set; }
         }
         public Boolean ValidateCaptcha()
         {
             bool result = true;
-            string captchaResponse = Request.Form["g-recaptcha-response"]; // value is null : FIX
-            TempData["response"] =captchaResponse;
+            string captchaResponse = Request.Form["g-recaptcha-response"];
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(
                 $"https://www.google.com/recaptcha/api/siteverify?secret=6LesYmApAAAAAN7qQJ9s9JpKpuVV3KRVdt1POHlO&response={captchaResponse}");
 
@@ -121,9 +125,7 @@ namespace AS_Assignment_2_Pt_2.Pages
                     using (StreamReader readStream = new StreamReader(wResponse.GetResponseStream()))
                     {
                         string jsonResponse = readStream.ReadToEnd();
-                        TempData["captcha"] = jsonResponse.ToString();
-                        JavaScriptSerializer js = new JavaScriptSerializer();
-                        MyObject jsonObject = js.Deserialize<MyObject>(jsonResponse);
+                        MyObject jsonObject = JsonSerializer.Deserialize<MyObject>(jsonResponse);
                         result = Convert.ToBoolean(jsonObject.success);
                     }
                 }

@@ -30,12 +30,13 @@
                             <input type="hidden" runat="server" id="g-recaptcha-response" name="g-recaptcha-response" />
                         </form>
                         
+                        <label>@TempData["captcha"]</label>
                         <label>@TempData["response"]</label>
                         @section Scripts{
                             <script type="text/javascript">
                                 grecaptcha.ready(function () {
                                     grecaptcha.execute('6LesYmApAAAAAPDi1cKdyKM4fnurSPo3Ji3tDCw-', { action: "login" }).then(function (token) {
-                                        document.getElementById("<%=g-recaptcha-response.ClientID%>").value = token;
+                                        document.getElementById("g-recaptcha-response").value = token;
                                         console.log(token);
                                         return token;
                                     });
