@@ -30,7 +30,7 @@ namespace AS_Assignment_2_Pt_2.Pages
                 }
                 else
                 {
-                    _logger.LogInformation(email);
+                    TempData["LoggedIn"] = email;
                 }
                 
             }
