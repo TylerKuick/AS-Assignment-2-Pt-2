@@ -1,0 +1,27 @@
+﻿@page
+@model AS_Assignment_2_Pt_2.Pages.VerifyModel
+@{
+     <div class="container mt-5">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+                        <h1 class="mb-3" >Verify Email</h1>
+
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="form-label" asp-for="VModel.Email">Email Address</label>
+                                <input type="text" asp-for="VModel.Email" class="form-control" />
+                                <span asp-validation-for="VModel.Email" class="text-danger"></span>
+                            </div>
+
+                            <span class="text-danger">@TempData["ErrorMsg"]</span>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Verify</button>
+                            </div>
+                            <input type="hidden" runat="server" id="g-recaptcha-response" name="g-recaptcha-response" />
+                        </form>
+
+            </div>
+        </div>
+    </div>
+}

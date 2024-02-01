@@ -18,6 +18,7 @@ using System.Text.Json;
 
 namespace AS_Assignment_2_Pt_2.Pages
 {
+    [AutoValidateAntiforgeryToken]
     public class LoginModel : PageModel
     {
         
@@ -26,6 +27,7 @@ namespace AS_Assignment_2_Pt_2.Pages
         public Login LModel { get; set; }
 
         private readonly SignInManager<Customer> signInManager;
+        private readonly UserManager<Customer> userManager;
         private readonly IConfiguration _configuration;
         public string MyDBConnection;
         //string MyDBConnection = System.Configuration.ConfigurationManager.ConnectionStrings["AuthConnectionString"].ConnectionString.ToString();
@@ -45,7 +47,7 @@ namespace AS_Assignment_2_Pt_2.Pages
         {
             string h = null;
             SqlConnection connection = new SqlConnection(MyDBConnection);
-            string sql = "select Password FROM AspNetUsers WHERE EmailAddress=@UserName";
+            string sql = "select Password FROM AspNetUsers WHERE Email=@UserName";
             SqlCommand command = new SqlCommand(sql, connection);
             command.Parameters.AddWithValue("@UserName", userid);
             try {
@@ -73,7 +75,7 @@ namespace AS_Assignment_2_Pt_2.Pages
         protected string getDBSalt(string userid) {
             string h = null;
             SqlConnection connection = new SqlConnection(MyDBConnection);
-            string sql = "select PasswordSalt FROM AspNetUsers WHERE EmailAddress=@UserName";
+            string sql = "select PasswordSalt FROM AspNetUsers WHERE Email=@UserName";
             SqlCommand command = new SqlCommand(sql, connection);
             command.Parameters.AddWithValue("@UserName", userid);
             try
@@ -133,11 +135,11 @@ namespace AS_Assignment_2_Pt_2.Pages
             }
             catch (WebException ex)
             {
-                throw ex;
+                return false;
             }
         }
 
-        public async Task<IActionResult> OnPostAsync() { 
+        public async Task<IActionResult> OnPostAsync() {
             if (ModelState.IsValid)
             {
                 string pwd = LModel.Password;
@@ -147,53 +149,51 @@ namespace AS_Assignment_2_Pt_2.Pages
                 string dbHash = getDBHash(email);
                 string dbSalt = getDBSalt(email);
 
-                if (ValidateCaptcha())
+                if (dbSalt != null && dbSalt.Length > 0 && dbHash != null && dbHash.Length > 0)
                 {
+                    string pwdWithSalt = pwd + dbSalt;
+                    byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwdWithSalt));
+                    string userHash = Convert.ToBase64String(hashWithSalt);
 
-                    if (dbSalt != null && dbSalt.Length > 0 && dbHash != null && dbHash.Length > 0)
+                    if (ValidateCaptcha())
                     {
-                        string pwdWithSalt = pwd + dbSalt;
-                        byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwdWithSalt));
-                        string userHash = Convert.ToBase64String(hashWithSalt);
+                        var identityResult = await signInManager.PasswordSignInAsync(HttpUtility.HtmlEncode(LModel.Email), HttpUtility.HtmlEncode(LModel.Password), LModel.RememberMe, true);
 
                         if (userHash == dbHash)
                         {
-                            var identityResult = await signInManager.PasswordSignInAsync(LModel.Email, LModel.Password, LModel.RememberMe, false);
+                            if (identityResult.IsLockedOut)
+                            {
+                                TempData["ErrorMsg"] = "Account Locked Out. Try again in 15 seconds.";
+                                return RedirectToPage("Login");
+                            }
                             HttpContext.Session.SetString("LoggedIn", LModel.Email);
                             string guid = Guid.NewGuid().ToString();
                             HttpContext.Session.SetString("AuthToken", guid);
                             Response.Cookies.Append("AuthToken", guid);
-                            return RedirectToPage("Index");
-
+                            return RedirectToPage("Index"); 
                         }
                         else
                         {
+                            //var userExist = await userManager.FindByLoginAsync(HttpUtility.HtmlEncode(LModel.Email), HttpUtility.HtmlEncode(LModel.Password));  
+                            //var result = signInManager.Find
+                            await signInManager.SignOutAsync();
                             TempData["ErrorMsg"] = "Username or Password Incorrect";
+                            if (identityResult.IsLockedOut)
+                            {
+                                TempData["ErrorMsg"] = "Account Locked Out. Try again in 15 seconds.";
+                                return RedirectToPage("Login");
+                            }
                             return RedirectToPage("Login");
                         }
                     }
+                    else
+                    {
+                        TempData["ErrorMsg"] = "Captcha Failed";
+                        return RedirectToPage("Login");
+                    }
                 }
-
-                /*
-                var identityResult = await signInManager.PasswordSignInAsync(LModel.Email, LModel.Password, LModel.RememberMe, false);
-                if (identityResult.Succeeded)
-                {
-
-                    HttpContext.Session.SetString("LoggedIn", LModel.Email);
-                    string guid = Guid.NewGuid().ToString();
-                    HttpContext.Session.SetString("AuthToken", guid);
-
-                    Response.Cookies.Append("AuthToken", guid);
-
-                    return RedirectToPage("Index");
-
-                }
-                else
-                {
-                    TempData["ErrorMsg"] = "Username or Password Incorrect";
-                    return RedirectToPage("Login");
-                }*/
             }
+
             return Page();
         }
     }

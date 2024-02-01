@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Data.SqlClient;
 using System.Linq.Expressions;
+using System.Web;
 
 namespace AS_Assignment_2_Pt_2.Pages
 {
@@ -38,6 +39,7 @@ namespace AS_Assignment_2_Pt_2.Pages
 
         protected byte[] encryptData(string data)
         {
+            string encryptedText;
             byte[] cipherText = null;
             try {
                 RijndaelManaged cipher = new RijndaelManaged();
@@ -76,24 +78,26 @@ namespace AS_Assignment_2_Pt_2.Pages
 
                 var user = new Customer()
                 {
-                    UserName = RModel.EmailAddress,
-                    Fname = RModel.Fname.Trim(),
-                    Lname = RModel.Lname.Trim(),
-                    Gender = RModel.Gender.Trim(),
-                    NRIC = encryptData(RModel.NRIC.Trim()).ToString(),
-                    EmailAddress = RModel.EmailAddress,
+                    UserName = RModel.Email,
+                    Fname = HttpUtility.HtmlEncode(RModel.Fname.Trim()),
+                    Lname = HttpUtility.HtmlEncode(RModel.Lname.Trim()),
+                    Gender = HttpUtility.HtmlEncode(RModel.Gender.Trim()),
+                    NRIC = encryptData(HttpUtility.HtmlEncode(RModel.NRIC.Trim())),
+                    Email = HttpUtility.HtmlEncode(RModel.Email),
                     Password = finalHash,
                     ConfirmPassword = finalHash,
                     PasswordSalt = salt,
                     DOB = RModel.DOB,
                     Resume = RModel.Resume,
-                    WhoAmI = RModel.WhoAmI.Trim()
+                    WhoAmI = HttpUtility.HtmlEncode(RModel.WhoAmI.Trim()),
+                    cryptIV = IV,
+                    cryptKey = Key
+
                 };
                 
                 var result = await userManager.CreateAsync(user, RModel.Password);
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);
                     return RedirectToPage("Login");
 
                 } 

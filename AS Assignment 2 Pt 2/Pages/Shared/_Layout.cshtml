@@ -45,31 +45,34 @@
                     @{
                         if (SignInManager.IsSignedIn(User))
                         {
-                                                <ul class="navbar-nav flex-grow-1">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                                                    </li>
-                                                </ul>
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                                </li>
+                            </ul>
 
-                                                <ul class="navbar-nav d-flex justify-content-end">
-                                                    <li class="="nav-item>
-                                                        <a class="btn btn-primary" asp-area="" asp-page="/Logout">Logout</a>
-                                                    </li>
-                                                </ul>
+                            <ul class="navbar-nav d-flex justify-content-end">
+                                <li class="=" nav-item>
+                                    <a class="btn btn-primary" asp-area="" asp-page="/ChangePassword">Change Password</a>
+                                </li>
+                                <li class="="nav-item>
+                                    <a class="btn btn-primary" asp-area="" asp-page="/Logout">Logout</a>
+                                </li>
+                            </ul>
                         }
                         else
                         {
-                                                <ul class="navbar-nav d-flex justify-content-end flex-grow-1">
-                                                    <li class="nav-item">
-                                                        <a class="btn btn-primary" asp-page="/Login">Login</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="btn btn-primary" asp-page="/Register">Register</a>
-                                                    </li>
-                                                </ul>
+                            <ul class="navbar-nav d-flex justify-content-end flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="btn btn-primary" asp-page="/Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-primary" asp-page="/Register">Register</a>
+                                </li>
+                            </ul>
                         }
                     }
                     

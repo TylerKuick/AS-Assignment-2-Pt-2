@@ -18,13 +18,12 @@ namespace AS_Assignment_2_Pt_2.Model
         public string Gender { get; set; }
 
         [Required]
-        [DataType(DataType.Text)]
-        public string NRIC { get; set; }
+        public byte[] NRIC { get; set; }
 
 
         [Required]
         [DataType(DataType.EmailAddress)]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [MinLength(12, ErrorMessage = "Passwords must be at least 12 characters long")]
@@ -36,8 +35,7 @@ namespace AS_Assignment_2_Pt_2.Model
         [Compare(nameof(Password), ErrorMessage = "Password and confirmation password does not match")]
         public string ConfirmPassword { get; set; }
 
-        public string PasswordSalt { get; set; }
-
+        public string PasswordSalt { get; set; }  
 
         [Required]
         [DataType(DataType.Date)]
@@ -50,5 +48,10 @@ namespace AS_Assignment_2_Pt_2.Model
         [Required]
         [DataType(DataType.MultilineText)]
         public string WhoAmI { get; set; }
+        [Required]
+        public byte[] cryptIV {  get; set; }
+        [Required]
+        public byte[] cryptKey { get; set; }
+        
     }
 }

@@ -1,12 +1,28 @@
 using AS_Assignment_2_Pt_2.Model;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+/*builder.Services.AddRateLimiter(_ => _
+.AddFixedWindowLimiter(policyName: "fixed", options =>
+{
+	options.PermitLimit = 2;
+	options.Window = TimeSpan.FromSeconds(20);
+	options.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+	options.QueueLimit = 2;
+}));*/
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AuthDbContext>();
-builder.Services.AddIdentity<Customer, IdentityRole>().AddEntityFrameworkStores<AuthDbContext>();
+builder.Services.AddIdentity<Customer, IdentityRole>(identityOptions =>
+{
+	identityOptions.Lockout.MaxFailedAccessAttempts = 3;
+	identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(15);	
+
+
+}).AddEntityFrameworkStores<AuthDbContext>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();	
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -29,10 +45,13 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/CustomError");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//app.UseRateLimiter();
 
 app.UseSession();
 
@@ -40,6 +59,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages();//.RequireRateLimiting("fixed");
 
 app.Run();
