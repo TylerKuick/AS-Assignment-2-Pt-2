@@ -146,6 +146,7 @@ namespace AS_Assignment_2_Pt_2.Pages
                 string email = LModel.Email.Trim();
 
                 SHA512Managed hashing = new SHA512Managed();
+
                 string dbHash = getDBHash(email);
                 string dbSalt = getDBSalt(email);
 
@@ -192,8 +193,9 @@ namespace AS_Assignment_2_Pt_2.Pages
                         return RedirectToPage("Login");
                     }
                 }
+                TempData["ErrorMsg"] = "Hash issue";
             }
-
+            TempData["ErrorMsg"] = "ModelState invalid";
             return Page();
         }
     }

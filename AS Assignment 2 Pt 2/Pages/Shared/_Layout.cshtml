@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AS_Assignment_2_Pt_2.styles.css" asp-append-version="true" />
     <script src="https://www.google.com/recaptcha/api.js?render=6LesYmApAAAAAPDi1cKdyKM4fnurSPo3Ji3tDCw-"></script>
-    <script type="text/javascript">
+    
+        <script type="text/javascript">
         function validate() {
             var str = document.getElementById("password").value;
             const lowercase = /[a-z]/;
@@ -24,12 +25,13 @@
                 document.getElementById("feedback").innerHTML = "Strong Password";
                 document.getElementById("feedback").style.color = "green";
             }
-            else { 
+            else {
                 document.getElementById("feedback").innerHTML = "Weak Password";
                 document.getElementById("feedback").style.color = "red";
             }
         }
     </script>
+    
 </head>
 <body>
     <header>
@@ -55,9 +57,6 @@
                             </ul>
 
                             <ul class="navbar-nav d-flex justify-content-end">
-                                <li class="=" nav-item>
-                                    <a class="btn btn-primary" asp-area="" asp-page="/ChangePassword">Change Password</a>
-                                </li>
                                 <li class="="nav-item>
                                     <a class="btn btn-primary" asp-area="" asp-page="/Logout">Logout</a>
                                 </li>

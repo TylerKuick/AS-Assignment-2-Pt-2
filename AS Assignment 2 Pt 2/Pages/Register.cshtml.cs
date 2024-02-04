@@ -67,7 +67,6 @@ namespace AS_Assignment_2_Pt_2.Pages
                 SHA512Managed hashing = new SHA512Managed();
 
                 string pwdWithSalt = pwd + salt;
-                byte[] plainHash = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwd));
                 byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwdWithSalt));
                 var finalHash = Convert.ToBase64String(hashWithSalt);
 
